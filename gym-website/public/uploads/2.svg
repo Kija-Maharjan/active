@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" fill="#111416"/>
+  <rect x="100" y="100" width="80" height="200" rx="10" fill="#e02020" opacity="0.6"/>
+  <rect x="200" y="80" width="80" height="240" rx="10" fill="#e02020" opacity="0.6"/>
+  <rect x="300" y="120" width="80" height="180" rx="10" fill="#e02020" opacity="0.4"/>
+  <rect x="400" y="90" width="80" height="220" rx="10" fill="#e02020" opacity="0.6"/>
+  <rect x="500" y="110" width="80" height="190" rx="10" fill="#e02020" opacity="0.4"/>
+  <rect x="600" y="70" width="80" height="260" rx="10" fill="#e02020" opacity="0.6"/>
+  <text x="400" y="450" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-size="28" letter-spacing="6" fill="#f0ede8">PREMIUM EQUIPMENT</text>
+</svg>
