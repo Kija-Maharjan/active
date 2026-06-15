@@ -1,4 +1,9 @@
+"use client";
+import { useRouter } from "next/navigation";
+
 export default function Plans() {
+  const router = useRouter();
+
   return (
     <section className="plans" id="plans">
       <div className="plans-inner">
@@ -16,7 +21,7 @@ export default function Plans() {
               <li>7 days a week</li>
               <li>Locker access</li>
             </ul>
-            <button className="plan-btn">Get Started</button>
+            <button className="plan-btn" onClick={() => router.push("/signup")}>Get Started</button>
           </div>
           <div className="plan featured">
             <div className="plan-badge">Most Popular</div>
@@ -31,7 +36,7 @@ export default function Plans() {
               <li>Locker access</li>
               <li>Priority support</li>
             </ul>
-            <button className="plan-btn">Get Started</button>
+            <button className="plan-btn" onClick={() => router.push("/signup")}>Get Started</button>
           </div>
           <div className="plan">
             <div className="plan-name">Annual</div>
@@ -46,7 +51,7 @@ export default function Plans() {
               <li>Priority support</li>
               <li>Free 1 month bonus</li>
             </ul>
-            <button className="plan-btn">Get Started</button>
+            <button className="plan-btn" onClick={() => router.push("/signup")}>Get Started</button>
           </div>
         </div>
       </div>

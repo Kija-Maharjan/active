@@ -1,19 +1,24 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const checkEmail = searchParams.get("check_email");
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     const supabase = createClient();
     const { error: authError } = await supabase.auth.signInWithPassword({
@@ -23,6 +28,7 @@ export default function LoginPage() {
 
     if (authError) {
       setError(authError.message);
+      setLoading(false);
       return;
     }
 
@@ -39,6 +45,12 @@ export default function LoginPage() {
           </div>
         </Link>
         <h2>Member Login</h2>
+
+        {checkEmail && (
+          <div className="auth-success">
+            Account created! Check your email to confirm, then sign in below.
+          </div>
+        )}
 
         {error && <div className="auth-error">{error}</div>}
 
@@ -65,8 +77,8 @@ export default function LoginPage() {
               placeholder="••••••••"
             />
           </div>
-          <button type="submit" className="auth-btn">
-            Sign In
+          <button type="submit" className="auth-btn" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 

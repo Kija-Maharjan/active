@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 
+import { useRouter } from "next/navigation";
+
 export default function Nav() {
+  const router = useRouter();
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -46,7 +49,7 @@ export default function Nav() {
         >
           Login
         </Link>
-        <button className="cta-btn" onClick={() => scrollTo("plans")}>
+        <button className="cta-btn" onClick={() => router.push("/signup")}>
           Join Now
         </button>
       </div>

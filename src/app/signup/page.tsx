@@ -7,25 +7,34 @@ import { createClient } from "@/lib/supabase/client";
 
 export default function SignupPage() {
   const router = useRouter();
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     const supabase = createClient();
     const { error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { role: "member" },
+        data: {
+          role: "member",
+          full_name: fullName,
+          phone,
+        },
       },
     });
 
     if (authError) {
       setError(authError.message);
+      setLoading(false);
       return;
     }
 
@@ -40,11 +49,22 @@ export default function SignupPage() {
             Active<span>Fitness</span>
           </div>
         </Link>
-        <h2>Create Account</h2>
+        <h2>Join Active Fitness</h2>
 
         {error && <div className="auth-error">{error}</div>}
 
         <form onSubmit={handleSignup}>
+          <div className="field">
+            <label htmlFor="name">Full Name</label>
+            <input
+              id="name"
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+              placeholder="Your full name"
+            />
+          </div>
           <div className="field">
             <label htmlFor="email">Email</label>
             <input
@@ -54,6 +74,16 @@ export default function SignupPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="your@email.com"
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="phone">Phone</label>
+            <input
+              id="phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="98XXXXXXXX"
             />
           </div>
           <div className="field">
@@ -68,8 +98,8 @@ export default function SignupPage() {
               minLength={6}
             />
           </div>
-          <button type="submit" className="auth-btn">
-            Sign Up
+          <button type="submit" className="auth-btn" disabled={loading}>
+            {loading ? "Creating account..." : "Create Account"}
           </button>
         </form>
 

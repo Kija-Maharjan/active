@@ -824,6 +824,10 @@ footer p {
 .auth-card .auth-btn:hover {
   background: var(--red-dark);
 }
+.auth-card .auth-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 .auth-card .auth-error {
   background: rgba(224, 32, 32, 0.15);
   color: var(--red);
@@ -833,6 +837,17 @@ footer p {
   text-align: center;
   font-family: 'Barlow Condensed', sans-serif;
   letter-spacing: 1px;
+}
+.auth-card .auth-success {
+  background: rgba(129, 199, 132, 0.15);
+  color: #81c784;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+  text-align: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
 }
 .auth-card .auth-link {
   text-align: center;
