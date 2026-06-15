@@ -1,12 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { user, supabase, supabaseResponse } = await updateSession(request);
 
   const { pathname } = request.nextUrl;
 
-  // Protect admin routes — redirect to admin login if not authenticated
   if (pathname.startsWith("/admin/dashboard")) {
     if (!user) {
       const url = request.nextUrl.clone();
@@ -15,7 +14,6 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    // Check if user has admin role in profiles table
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")
@@ -30,7 +28,6 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // Redirect authenticated users away from auth pages to home
   if (pathname === "/login" || pathname === "/signup") {
     if (user) {
       const url = request.nextUrl.clone();
