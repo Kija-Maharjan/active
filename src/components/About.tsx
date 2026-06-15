@@ -19,7 +19,7 @@ export default function About() {
             Built On Iron, Driven By Results
           </h2>
           <p>
-            Since 2015, Active Fitness has been Balambu&apos;s premier strength
+            Since 2015, Active Fitness has been Chandragiri&apos;s premier strength
             and conditioning gym. We house a full range of professional-grade
             equipment to support every training goal — from powerlifting to body
             composition.

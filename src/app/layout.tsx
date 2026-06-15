@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Active Fitness – Chandragiri 12, Balambu",
+  title: "Active Fitness – M7W2+77J Chundevi Repair Road, Chandragiri",
   description:
-    "Premium gym in Chandragiri 12, Balambu. Join Active Fitness today — iron, intensity, results.",
+    "Premium gym on Chundevi Repair Road, Chandragiri. Join Active Fitness today — iron, intensity, results.",
 };
 
 export default function RootLayout({

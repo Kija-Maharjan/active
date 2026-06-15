@@ -4,7 +4,7 @@ export default function Hero() {
       <div className="hero-bg" />
       <div className="hero-overlay" />
       <div className="hero-content">
-        <div className="hero-tag">Est. 2015 · Kathmandu</div>
+        <div className="hero-tag">Est. 2015 · Chandragiri</div>
         <h1>
           Forge Your <em>Strength.</em>
         </h1>
@@ -12,7 +12,7 @@ export default function Hero() {
           A premium training environment built for those who refuse to settle.
           Iron, intensity, and results — every single day.
         </p>
-        <p className="hero-addr">📍 Chandragiri 12, Balambu</p>
+        <p className="hero-addr">📍 M7W2+77J Chundevi Repair Road, Chandragiri 44600</p>
         <div className="hero-actions">
           <a href="#plans" className="btn-primary">
             Get Membership

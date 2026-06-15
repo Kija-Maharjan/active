@@ -13,19 +13,22 @@ export default function Contact() {
             <div className="cd">
               <div className="cd-icon">📍</div>
               <div className="cd-text">
-                <strong>Address</strong>Chandragiri 12, Balambu, Kathmandu
+                <strong>Address</strong>M7W2+77J Chundevi Repair Road, Chandragiri 44600
               </div>
             </div>
             <div className="cd">
               <div className="cd-icon">🕐</div>
               <div className="cd-text">
-                <strong>Hours</strong>Sunday – Saturday: 5:00 AM – 10:00 PM
+                <strong>Hours</strong><br/>
+                  Mon–Fri: 5 AM–8 PM<br/>
+                  Sat: 5–10 AM<br/>
+                  Sun: 5 AM–8 PM
               </div>
             </div>
             <div className="cd">
               <div className="cd-icon">📞</div>
               <div className="cd-text">
-                <strong>Phone</strong>+977-XXX-XXXXXXX
+                <strong>Phone</strong>9841830305
               </div>
             </div>
           </div>

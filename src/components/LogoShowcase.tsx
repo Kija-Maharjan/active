@@ -10,7 +10,7 @@ export default function LogoShowcase() {
         height={180}
         style={{ maxWidth: 520, width: "100%", height: "auto" }}
       />
-      <p>Chandragiri 12, Balambu · Get a Membership Now</p>
+      <p>M7W2+77J Chundevi Repair Road, Chandragiri 44600 · Get a Membership Now</p>
     </div>
   );
 }
