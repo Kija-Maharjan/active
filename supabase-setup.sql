@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS public.membership_plans (
   period TEXT NOT NULL,
   description TEXT,
   features JSONB NOT NULL DEFAULT '[]',
+  admission_fee NUMERIC(10,2) NOT NULL DEFAULT 0,
   is_featured BOOLEAN NOT NULL DEFAULT false,
   is_active BOOLEAN NOT NULL DEFAULT true,
   sort_order INT NOT NULL DEFAULT 0,
@@ -110,10 +111,10 @@ CREATE POLICY "Anyone can view active workouts" ON public.workout_plans FOR SELE
 CREATE POLICY "Admins can manage workouts" ON public.workout_plans FOR ALL USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
 
 -- SEED DATA
-INSERT INTO public.membership_plans (name, price, period, features, is_featured, sort_order) VALUES
-  ('Monthly', 1500, 'mo', '["Full gym access","All equipment included","7 days a week","Locker access"]', false, 1),
-  ('Quarterly', 4000, '3mo', '["Full gym access","All equipment included","7 days a week","Locker access","Priority support"]', true, 2),
-  ('Annual', 13000, 'yr', '["Full gym access","All equipment included","7 days a week","Locker access","Priority support","Free 1 month bonus"]', false, 3);
+INSERT INTO public.membership_plans (name, price, period, features, admission_fee, is_featured, sort_order) VALUES
+  ('Monthly', 2500, 'mo', '["Full gym access","All equipment included","7 days a week","Locker access","Free fitness consultation"]', 1000, false, 1),
+  ('Quarterly', 6500, '3mo', '["Full gym access","All equipment included","7 days a week","Locker access","Priority support","1 free personal training session","Priority class booking"]', 1000, true, 2),
+  ('Annual', 22000, 'yr', '["Full gym access","All equipment included","7 days a week","Locker access","Priority support","3 free personal training sessions","Free nutrition consultation","Free 1 month bonus"]', 1000, false, 3);
 
 INSERT INTO public.workout_plans (name, days_per_week, description, sort_order) VALUES
   ('Strength Builder', '3 Days / Week', 'Focused compound lifts to build raw strength and power. Squat, bench, deadlift - the essentials.', 1),

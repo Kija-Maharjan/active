@@ -120,8 +120,9 @@ create table if not exists public.membership_plans (
   price         numeric(10, 2) not null,
   period        text not null, -- 'mo', '3mo', 'yr'
   description   text,
-  features      jsonb not null default '[]',
-  is_featured   boolean not null default false,
+  features jsonb not null default '[]',
+  admission_fee numeric(10, 2) not null default 0,
+  is_featured boolean not null default false,
   is_active     boolean not null default true,
   sort_order    int not null default 0,
   created_at    timestamptz not null default now(),
@@ -167,10 +168,10 @@ create policy "Admins can manage workout plans"
 -- SEED DATA — default membership & workout plans
 -- ═══════════════════════════════════════════════════════════
 
-insert into public.membership_plans (name, price, period, features, is_featured, sort_order) values
-  ('Monthly',   1500, 'mo',  '["Full gym access","All equipment included","7 days a week","Locker access"]',                        false, 1),
-  ('Quarterly', 4000, '3mo', '["Full gym access","All equipment included","7 days a week","Locker access","Priority support"]',    true,  2),
-  ('Annual',    13000, 'yr', '["Full gym access","All equipment included","7 days a week","Locker access","Priority support","Free 1 month bonus"]', false, 3);
+insert into public.membership_plans (name, price, period, features, admission_fee, is_featured, sort_order) values
+  ('Monthly',   2500, 'mo',  '["Full gym access","All equipment included","7 days a week","Locker access","Free fitness consultation"]',            1000, false, 1),
+  ('Quarterly', 6500, '3mo', '["Full gym access","All equipment included","7 days a week","Locker access","Priority support","1 free personal training session","Priority class booking"]', 1000, true,  2),
+  ('Annual',    22000, 'yr', '["Full gym access","All equipment included","7 days a week","Locker access","Priority support","3 free personal training sessions","Free nutrition consultation","Free 1 month bonus"]', 1000, false, 3);
 
 insert into public.workout_plans (name, days_per_week, description, sort_order) values
   ('Strength Builder',  '3 Days / Week', 'Focused compound lifts to build raw strength and power. Squat, bench, deadlift — the essentials.',  1),

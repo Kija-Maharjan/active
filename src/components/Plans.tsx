@@ -1,8 +1,43 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
+type Plan = {
+  id: string;
+  name: string;
+  price: number;
+  period: string;
+  description: string | null;
+  features: string[];
+  admission_fee: number;
+  is_featured: boolean;
+  is_active: boolean;
+  sort_order: number;
+};
+
+function formatPeriod(period: string): string {
+  const map: Record<string, string> = {
+    mo: "/mo",
+    "3mo": "/3mo",
+    yr: "/yr",
+  };
+  return map[period] ?? `/${period}`;
+}
 
 export default function Plans() {
   const router = useRouter();
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/plans")
+      .then((res) => res.json())
+      .then((data) => setPlans(data))
+      .catch(() => setPlans([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const maxAdmissionFee = Math.max(...plans.map((p) => p.admission_fee), 0);
 
   return (
     <section className="plans" id="plans">
@@ -14,54 +49,56 @@ export default function Plans() {
             All plans include full gym access, locker facilities, and a free fitness consultation.
             No hidden fees — cancel anytime.
           </p>
+          {maxAdmissionFee > 0 && (
+            <p className="plans-admission" style={{ marginTop: 8, fontSize: "0.85rem", color: "var(--muted)" }}>
+              One-time admission fee: <strong>Rs {maxAdmissionFee.toLocaleString()}</strong>
+            </p>
+          )}
         </div>
-        <div className="plans-grid">
-          <div className="plan">
-            <div className="plan-name">Monthly</div>
-            <div className="plan-price">
-              <sup>Rs </sup>1,500<span>/mo</span>
-            </div>
-            <ul>
-              <li>Full gym access</li>
-              <li>All equipment included</li>
-              <li>7 days a week</li>
-              <li>Locker &amp; changing room</li>
-              <li>Free fitness consultation</li>
-            </ul>
-            <button className="plan-btn" onClick={() => router.push("/signup")}>Get Started</button>
-          </div>
 
-          <div className="plan featured">
-            <div className="plan-badge">Most Popular</div>
-            <div className="plan-name">Quarterly</div>
-            <div className="plan-price">
-              <sup>Rs </sup>4,000<span>/3mo</span>
-            </div>
-            <ul>
-              <li>Everything in Monthly</li>
-              <li>Priority support</li>
-              <li>1 free personal training session</li>
-              <li>Priority class booking</li>
-              <li>Save Rs 500</li>
-            </ul>
-            <button className="plan-btn" onClick={() => router.push("/signup")}>Get Started</button>
+        {loading ? (
+          <div className="plans-grid">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="plan" style={{ opacity: 0.4, pointerEvents: "none" }}>
+                <div className="plan-name" style={{ background: "var(--border)", height: 20, width: "60%", margin: "0 auto 12px", borderRadius: 4 }} />
+                <div style={{ background: "var(--border)", height: 32, width: "50%", margin: "0 auto 24px", borderRadius: 4 }} />
+                <ul>
+                  {[1, 2, 3, 4].map((j) => (
+                    <li key={j} style={{ background: "var(--border)", height: 14, width: "70%", margin: "8px 0", borderRadius: 4, listStyle: "none" }} />
+                  ))}
+                </ul>
+                <div style={{ background: "var(--border)", height: 40, width: "80%", margin: "24px auto 0", borderRadius: 4 }} />
+              </div>
+            ))}
           </div>
-
-          <div className="plan">
-            <div className="plan-name">Annual</div>
-            <div className="plan-price">
-              <sup>Rs </sup>13,000<span>/yr</span>
-            </div>
-            <ul>
-              <li>Everything in Quarterly</li>
-              <li>3 free personal training sessions</li>
-              <li>Free nutrition consultation</li>
-              <li>1 month free bonus</li>
-              <li>Best value — save Rs 5,000</li>
-            </ul>
-            <button className="plan-btn" onClick={() => router.push("/signup")}>Get Started</button>
+        ) : plans.length === 0 ? (
+          <p style={{ textAlign: "center", color: "var(--muted)", padding: "40px 0" }}>
+            No membership plans available at the moment.
+          </p>
+        ) : (
+          <div className="plans-grid">
+            {plans.map((plan) => (
+              <div key={plan.id} className={`plan${plan.is_featured ? " featured" : ""}`}>
+                {plan.is_featured && <div className="plan-badge">Most Popular</div>}
+                <div className="plan-name">{plan.name}</div>
+                <div className="plan-price">
+                  <sup>Rs </sup>{plan.price.toLocaleString()}<span>{formatPeriod(plan.period)}</span>
+                </div>
+                {plan.admission_fee > 0 && (
+                  <p style={{ fontSize: "0.75rem", color: "var(--muted)", margin: "-8px 0 12px" }}>
+                    + Rs {plan.admission_fee.toLocaleString()} admission
+                  </p>
+                )}
+                <ul>
+                  {plan.features.map((feature, i) => (
+                    <li key={i}>{feature}</li>
+                  ))}
+                </ul>
+                <button className="plan-btn" onClick={() => router.push("/signup")}>Get Started</button>
+              </div>
+            ))}
           </div>
-        </div>
+        )}
 
         <div className="plans-cta">
           <p>Not ready to commit? <strong>Try us free for a day</strong> — no strings attached.</p>

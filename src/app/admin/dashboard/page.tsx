@@ -102,11 +102,15 @@ export default function AdminDashboard() {
         </div>
 
         <div className="admin-section">
-          <h2>Membership Management</h2>
+          <h2>Membership Plans</h2>
           <p>
-            View and manage member registrations, plan upgrades, and access
-            status.
+            Manage membership pricing, features, and plan visibility.
           </p>
+          <div style={{ marginTop: 16 }}>
+            <a href="/admin/plans" className="admin-btn" style={{ textDecoration: "none", display: "inline-block" }}>
+              Manage Plans
+            </a>
+          </div>
         </div>
 
         <div className="admin-section">
