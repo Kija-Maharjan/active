@@ -90,6 +90,13 @@ export default function AdminPlans() {
     setSuccess("");
   };
 
+  const fetchPlans = async () => {
+    const res = await fetch("/api/admin/plans");
+    if (res.ok) {
+      setPlans(await res.json());
+    }
+  };
+
   const handleSave = async () => {
     setError("");
     setSuccess("");
