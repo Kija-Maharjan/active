@@ -28,12 +28,26 @@ export default function Plans() {
   const router = useRouter();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/plans")
-      .then((res) => res.json())
-      .then((data) => setPlans(data))
-      .catch(() => setPlans([]))
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) {
+          const message = typeof data === "object" && data !== null && "error" in data ? data.error : "Failed to load plans.";
+          throw new Error(message);
+        }
+        if (!Array.isArray(data)) {
+          throw new Error("Unexpected plans response format.");
+        }
+        setPlans(data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch plans:", err);
+        setError(err instanceof Error ? err.message : "Failed to load plans.");
+        setPlans([]);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -71,6 +85,10 @@ export default function Plans() {
               </div>
             ))}
           </div>
+        ) : error ? (
+          <p style={{ textAlign: "center", color: "var(--muted)", padding: "40px 0" }}>
+            {error}
+          </p>
         ) : plans.length === 0 ? (
           <p style={{ textAlign: "center", color: "var(--muted)", padding: "40px 0" }}>
             No membership plans available at the moment.
