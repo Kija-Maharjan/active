@@ -14,6 +14,12 @@ create table if not exists public.profiles (
 );
 alter table public.profiles enable row level security;
 
+-- Helper to check admin role without causing RLS recursion
+create or replace function public.is_admin()
+returns boolean as $$
+  select role = 'admin' from public.profiles where id = auth.uid();
+$$ language sql security definer;
+
 -- Auto-create profile on signup (copies role from user_metadata)
 create or replace function public.handle_new_user()
 returns trigger as $$
@@ -56,7 +62,7 @@ create policy "Users can view own profile"
 
 create policy "Admins can view all profiles"
   on public.profiles for select
-  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
+  using (public.is_admin());
 
 create policy "Users can update own profile"
   on public.profiles for update
@@ -84,7 +90,7 @@ alter table public.members enable row level security;
 -- RLS: admins only
 create policy "Admins can manage members"
   on public.members for all
-  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
+  using (public.is_admin());
 
 
 -- 3. CONTACT SUBMISSIONS (from the website contact form)
@@ -106,11 +112,11 @@ create policy "Anyone can submit contact form"
 
 create policy "Admins can read contact submissions"
   on public.contact_submissions for select
-  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
+  using (public.is_admin());
 
 create policy "Admins can update contact submissions"
   on public.contact_submissions for update
-  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
+  using (public.is_admin());
 
 
 -- 4. MEMBERSHIP PLANS (pricing plans shown on the site)
@@ -137,7 +143,7 @@ create policy "Anyone can view active plans"
 
 create policy "Admins can manage plans"
   on public.membership_plans for all
-  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
+  using (public.is_admin());
 
 
 -- 5. WORKOUT PLANS (training programmes shown on the site)
@@ -161,7 +167,7 @@ create policy "Anyone can view active workout plans"
 
 create policy "Admins can manage workout plans"
   on public.workout_plans for all
-  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
+  using (public.is_admin());
 
 
 -- ═══════════════════════════════════════════════════════════
