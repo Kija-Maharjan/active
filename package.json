@@ -5,10 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "db:migrate": "node ./scripts/db/migrate.js",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "pg": "^8.11.0",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.107.0",
     "next": "16.2.7",
