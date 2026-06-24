@@ -109,6 +109,40 @@ nav .nav-login-link {
 nav .nav-login-link:hover {
   color: var(--red);
 }
+.nav-profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 999px;
+  color: var(--light);
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+.nav-profile-link:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(224, 32, 32, 0.35);
+}
+.nav-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--red);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.nav-profile-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
 .nav-desktop-actions {
   display: flex;
   gap: 12px;

@@ -1,12 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Nav() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [profile, setProfile] = useState<any>(null);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      if (user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name")
+          .eq("id", user.id)
+          .single();
+        setProfile(profile);
+      }
+    };
+    loadUser();
+  }, []);
 
   const scrollTo = (id: string) => {
     setOpen(false);
@@ -43,15 +63,33 @@ export default function Nav() {
         </li>
       </ul>
       <div className="nav-desktop-actions">
-        <Link
-          href="/login"
-          className="nav-login-link"
-        >
-          Login
-        </Link>
-        <button className="cta-btn" onClick={() => router.push("/signup")}>
-          Join Now
-        </button>
+        {user ? (
+          <Link href="/profile" className="nav-profile-link" onClick={() => setOpen(false)}>
+            <span className="nav-avatar">
+              {profile?.full_name
+                ? profile.full_name
+                    .split(" ")
+                    .map((part: string) => part[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase()
+                : "ME"}
+            </span>
+            <span className="nav-profile-text">Profile</span>
+          </Link>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              className="nav-login-link"
+            >
+              Login
+            </Link>
+            <button className="cta-btn" onClick={() => router.push("/signup") }>
+              Join Now
+            </button>
+          </>
+        )}
       </div>
       <button className={`hamburger ${open ? "open" : ""}`} onClick={() => setOpen(!open)} aria-label="Toggle menu">
         <span></span>
