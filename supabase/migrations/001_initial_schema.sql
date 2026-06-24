@@ -56,14 +56,17 @@ create trigger on_auth_user_email_updated
   for each row execute function public.sync_profile_email();
 
 -- RLS: users read own profile; admins read all
+drop policy if exists "Users can view own profile" on public.profiles;
 create policy "Users can view own profile"
   on public.profiles for select
   using (auth.uid() = id);
 
+drop policy if exists "Admins can view all profiles" on public.profiles;
 create policy "Admins can view all profiles"
   on public.profiles for select
   using (public.is_admin());
 
+drop policy if exists "Users can update own profile" on public.profiles;
 create policy "Users can update own profile"
   on public.profiles for update
   using (auth.uid() = id)
@@ -88,6 +91,7 @@ create table if not exists public.members (
 alter table public.members enable row level security;
 
 -- RLS: admins only
+drop policy if exists "Admins can manage members" on public.members;
 create policy "Admins can manage members"
   on public.members for all
   using (public.is_admin());
@@ -106,14 +110,17 @@ create table if not exists public.contact_submissions (
 alter table public.contact_submissions enable row level security;
 
 -- RLS: anyone can insert; only admins can read
+drop policy if exists "Anyone can submit contact form" on public.contact_submissions;
 create policy "Anyone can submit contact form"
   on public.contact_submissions for insert
   with check (true);
 
+drop policy if exists "Admins can read contact submissions" on public.contact_submissions;
 create policy "Admins can read contact submissions"
   on public.contact_submissions for select
   using (public.is_admin());
 
+drop policy if exists "Admins can update contact submissions" on public.contact_submissions;
 create policy "Admins can update contact submissions"
   on public.contact_submissions for update
   using (public.is_admin());
@@ -137,10 +144,12 @@ create table if not exists public.membership_plans (
 alter table public.membership_plans enable row level security;
 
 -- RLS: anyone can read active plans; admins can manage
+drop policy if exists "Anyone can view active plans" on public.membership_plans;
 create policy "Anyone can view active plans"
   on public.membership_plans for select
   using (is_active = true);
 
+drop policy if exists "Admins can manage plans" on public.membership_plans;
 create policy "Admins can manage plans"
   on public.membership_plans for all
   using (public.is_admin());
@@ -161,10 +170,12 @@ create table if not exists public.workout_plans (
 alter table public.workout_plans enable row level security;
 
 -- RLS: anyone can read active plans; admins can manage
-create policy "Anyone can view active workout plans"
-  on public.workout_plans for select
-  using (is_active = true);
+ drop policy if exists "Anyone can view active workout plans" on public.workout_plans;
+ create policy "Anyone can view active workout plans"
+   on public.workout_plans for select
+   using (is_active = true);
 
+drop policy if exists "Admins can manage workout plans" on public.workout_plans;
 create policy "Admins can manage workout plans"
   on public.workout_plans for all
   using (public.is_admin());
